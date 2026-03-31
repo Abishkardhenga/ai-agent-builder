@@ -1,7 +1,8 @@
 import { type ChangeEvent } from 'react'
-import { AlertCircle, Loader2, SlidersHorizontal } from 'lucide-react'
+import { AlertCircle, SlidersHorizontal } from 'lucide-react'
 
 import { AI_PROVIDERS } from '@/constants/aiProviders'
+import { Skeleton } from '@/components/ui/skeleton'
 import type { AgentData } from '@/types/agent'
 
 interface ConfigurationOptionsProps {
@@ -14,7 +15,6 @@ interface ConfigurationOptionsProps {
   onProviderChange: (provider: string) => void
   onSkillSelect: (e: ChangeEvent<HTMLSelectElement>) => void
   onLayerSelect: (e: ChangeEvent<HTMLSelectElement>) => void
-  onRefetch: () => void
 }
 
 export function ConfigurationOptions({
@@ -27,18 +27,14 @@ export function ConfigurationOptions({
   onProviderChange,
   onSkillSelect,
   onLayerSelect,
-  onRefetch,
 }: ConfigurationOptionsProps) {
   return (
     <section className="flex min-h-0 flex-col" aria-labelledby="config-heading">
       <div className="mb-4 flex items-center gap-2 sm:mb-5">
-        <SlidersHorizontal
-          className="size-5 shrink-0 text-teal-600"
-          aria-hidden
-        />
+        <SlidersHorizontal className="size-5 shrink-0 text-teal-600 dark:text-teal-400" aria-hidden />
         <h2
           id="config-heading"
-          className="text-lg font-semibold tracking-tight text-slate-900 sm:text-xl"
+          className="text-lg font-semibold tracking-tight text-slate-900 dark:text-white sm:text-xl"
         >
           Configuration
         </h2>
@@ -47,7 +43,7 @@ export function ConfigurationOptions({
       <div className="card-panel flex flex-1 flex-col">
         {error && (
           <div
-            className="mb-4 flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 px-3 py-2.5 text-sm text-red-800"
+            className="mb-4 flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 px-3 py-2.5 text-sm text-red-800 dark:border-red-900/70 dark:bg-red-950/50 dark:text-red-200"
             role="alert"
           >
             <AlertCircle className="mt-0.5 size-4 shrink-0" aria-hidden />
@@ -55,21 +51,28 @@ export function ConfigurationOptions({
           </div>
         )}
 
-        {loading && (
-          <div className="mb-4 flex items-center gap-3 rounded-xl border border-teal-200/80 bg-teal-50/80 px-4 py-3 text-sm text-teal-900">
-            <Loader2 className="size-5 shrink-0 animate-spin text-teal-600" />
-            <span>
-              Loading configuration (simulated delay 1–3s to exercise loading
-              states).
-            </span>
+        {loading && !data && (
+          <div className="mb-4 space-y-4 rounded-xl border border-slate-200/80 bg-slate-50/70 p-4 dark:border-slate-700/70 dark:bg-slate-900/50">
+            <div className="space-y-2">
+              <Skeleton className="h-3.5 w-28" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+            <div className="space-y-2">
+              <Skeleton className="h-3.5 w-20" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+            <div className="space-y-2">
+              <Skeleton className="h-3.5 w-36" />
+              <Skeleton className="h-10 w-full" />
+            </div>
           </div>
         )}
 
         {!data && !loading && !error && (
-          <p className="text-sm text-slate-500">No data loaded yet.</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400">No data loaded yet.</p>
         )}
 
-        {data && (
+        {data && !loading && (
           <div className="flex flex-col gap-5 sm:gap-6">
             <div>
               <label htmlFor="profile-select" className="field-label">
@@ -78,10 +81,7 @@ export function ConfigurationOptions({
               <select
                 id="profile-select"
                 value={selectedProfile}
-                onChange={(e) => {
-                  onProfileChange(e.target.value)
-                  onRefetch()
-                }}
+                onChange={(e) => onProfileChange(e.target.value)}
                 className="input-field"
               >
                 <option value="">Select a profile</option>

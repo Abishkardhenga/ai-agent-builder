@@ -1,4 +1,3 @@
-
 import { AgentBuilderHeader } from '@/components/agent-builder/AgentBuilderHeader'
 import { ConfigurationOptions } from '@/components/agent-builder/ConfigurationOptions'
 import { ConfigurationPreview } from '@/components/agent-builder/ConfigurationPreview'
@@ -32,7 +31,7 @@ function App() {
   } = useAgentBuilder()
 
   return (
-    <div className="min-h-dvh bg-gradient-to-b from-slate-50 to-slate-100/80">
+    <div className="min-h-dvh bg-linear-to-b from-white to-slate-100/80 dark:from-black dark:to-slate-950">
       <div className="mx-auto flex min-h-dvh max-w-7xl flex-col px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
         <AgentBuilderHeader
           loading={loading}
@@ -52,10 +51,10 @@ function App() {
               onProviderChange={setSelectedProvider}
               onSkillSelect={handleSkillSelect}
               onLayerSelect={handleLayerSelect}
-              onRefetch={fetchAPI}
             />
             <ConfigurationPreview
               data={data}
+              loading={loading}
               selectedProfile={selectedProfile}
               selectedSkills={selectedSkills}
               selectedLayers={selectedLayers}

@@ -4,6 +4,7 @@ import {
   useState,
   type ChangeEvent,
 } from 'react'
+import { toast } from 'sonner'
 
 import type { AgentData, SavedAgent } from '@/types/agent'
 
@@ -91,7 +92,6 @@ export function useAgentBuilder() {
       setSelectedLayers([...selectedLayers, layerId])
     }
     e.target.value = ''
-    void fetchAPI()
   }
 
   const handleSkillSelect = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -100,7 +100,6 @@ export function useAgentBuilder() {
       setSelectedSkills([...selectedSkills, skillId])
     }
     e.target.value = ''
-    void fetchAPI()
   }
 
   const handleDeleteAgent = (indexToRemove: number) => {
@@ -113,7 +112,7 @@ export function useAgentBuilder() {
 
   const handleSaveAgent = () => {
     if (!agentName.trim()) {
-      alert('Please enter a name for your agent.')
+      toast.error('Please enter a name for your agent.')
       return
     }
 
@@ -129,7 +128,7 @@ export function useAgentBuilder() {
     setSavedAgents(updatedAgents)
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedAgents))
     setAgentName('')
-    alert(`Agent "${newAgent.name}" saved successfully!`)
+    toast.success(`Agent "${newAgent.name}" saved successfully.`)
   }
 
   const handleLoadAgent = (agent: SavedAgent) => {
@@ -143,6 +142,7 @@ export function useAgentBuilder() {
   const clearAllSavedAgents = () => {
     setSavedAgents([])
     localStorage.removeItem(STORAGE_KEY)
+    toast.success('All saved agents were cleared.')
   }
 
   const removeSkill = (skillId: string) => {
